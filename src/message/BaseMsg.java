@@ -40,6 +40,10 @@ public class BaseMsg  implements Serializable {
     
     public void putParams(String key, Object val){
     	params.put(key, val);
+ 
+    
+    
+    
     }
     
 }
