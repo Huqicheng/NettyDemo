@@ -17,7 +17,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler {
                 case WRITER_IDLE:
                     BaseMsg pingMsg=new BaseMsg();
                     pingMsg.setType(MsgType.PING);
-                    ctx.writeAndFlush(pingMsg);
+                    ctx.writeAndFlush(new Gson().toJson(pingMsg));
                     System.out.println("send ping to server----------");
                     break;
                 default:
@@ -35,7 +35,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler {
                 loginMsg.setType(MsgType.LOGIN);
                 loginMsg.putParams("user", "huqicheng");
                 loginMsg.putParams("pwd", "huqicheng");
-                channelHandlerContext.writeAndFlush(loginMsg);
+                channelHandlerContext.writeAndFlush(new Gson().toJson(loginMsg));
             }break;
             case PING:{
                 System.out.println("receive ping from server----------");
@@ -49,7 +49,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler {
             	BaseMsg replyMsg=new BaseMsg();
             	replyMsg.setType(MsgType.REPLY);
                 replyMsg.putParams("body", "reply from client");
-                channelHandlerContext.writeAndFlush(replyMsg);
+                channelHandlerContext.writeAndFlush(new Gson().toJson(replyMsg));
             }break;
             case REPLY:{
                 System.out.println("receive client msg: "+baseMsg.getParams().get("body"));

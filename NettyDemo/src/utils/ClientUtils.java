@@ -17,9 +17,9 @@ public class ClientUtils {
 
 	private static void startClient() {
 		// TODO Auto-generated method stub
-		Constants.setClientId("001");
+		Constants.setClientId("002");
         try {
-			client=new NettyClientBootstrap(8080,"192.168.11.6");
+			client=new NettyClientBootstrap(8080,"localhost");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());

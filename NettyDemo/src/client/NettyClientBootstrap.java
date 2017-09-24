@@ -57,11 +57,11 @@ public class NettyClientBootstrap {
             System.out.println("connect server  成功---------");
         }
     }
-    public static void main(String[]args) throws InterruptedException {
+    public static void main(String[]args){
+    	System.out.println("start");
         NettyClientBootstrap bootstrap=ClientUtils.getInstance();
 
         BaseMsg loginMsg=new BaseMsg();
-        loginMsg.setClientId("001");
         loginMsg.setType(MsgType.LOGIN);
         loginMsg.putParams("user", "huqicheng");
         loginMsg.putParams("pwd", "huqicheng");

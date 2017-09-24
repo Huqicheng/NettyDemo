@@ -32,7 +32,7 @@ public class ServerWriteUtils {
 	public static void startServer(){
 		if(bootstrap != null) return;
 		try {
-			bootstrap=new NettyServerBootstrap(9999);
+			bootstrap=new NettyServerBootstrap(8080);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());

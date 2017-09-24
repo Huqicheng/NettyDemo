@@ -27,7 +27,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
                     //the client has not authenticated,notify the client to log in
                     BaseMsg loginMsg=new BaseMsg();
                     loginMsg.setType(MsgType.LOGIN);
-                    channelHandlerContext.channel().writeAndFlush(loginMsg);
+                    channelHandlerContext.channel().writeAndFlush(new Gson().toJson(loginMsg));
             }
         }
         switch (baseMsg.getType()){
@@ -35,7 +35,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
                 BaseMsg replyPing=new BaseMsg();
                 replyPing.setType(MsgType.PING);
                 
-                NettyChannelMap.get(baseMsg.getClientId()).writeAndFlush(replyPing);
+                NettyChannelMap.get(baseMsg.getClientId()).writeAndFlush(new Gson().toJson(replyPing));
             }break;
             case ASK:{
                 //收到客户端的请求
@@ -44,7 +44,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
                 	BaseMsg replyMsg=new BaseMsg();
                 	replyMsg.setType(MsgType.REPLY);
                     replyMsg.putParams("body", "reply from server");
-                    NettyChannelMap.get(baseMsg.getClientId()).writeAndFlush(replyMsg);
+                    NettyChannelMap.get(baseMsg.getClientId()).writeAndFlush(new Gson().toJson(replyMsg));
                 }
             }break;
             case REPLY:{
