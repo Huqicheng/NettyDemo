@@ -17,6 +17,8 @@ import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.gson.Gson;
+
 import utils.ClientUtils;
 import message.BaseMsg;
 import message.Constants;
@@ -63,7 +65,7 @@ public class NettyClientBootstrap {
         loginMsg.setType(MsgType.LOGIN);
         loginMsg.putParams("user", "huqicheng");
         loginMsg.putParams("pwd", "huqicheng");
-        bootstrap.socketChannel.writeAndFlush(loginMsg);
+        bootstrap.socketChannel.writeAndFlush(new Gson().toJson(loginMsg));
 //        while (true){
 //            TimeUnit.SECONDS.sleep(3);
 //            BaseMsg askMsg=new BaseMsg();

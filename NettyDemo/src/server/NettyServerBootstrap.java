@@ -11,6 +11,8 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.gson.Gson;
+
 import utils.ServerWriteUtils;
 import container.NettyChannelMap;
 import message.BaseMsg;
@@ -57,7 +59,7 @@ public class NettyServerBootstrap {
             if(channel!=null){
                 BaseMsg ping=new BaseMsg();
                 ping.setType(MsgType.PING);
-                channel.writeAndFlush(ping);
+                channel.writeAndFlush(new Gson().toJson(ping));
             }
             TimeUnit.SECONDS.sleep(1000);
         }

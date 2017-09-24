@@ -1,5 +1,7 @@
 package server;
 
+import com.google.gson.Gson;
+
 import container.NettyChannelMap;
 import message.*;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,17 +9,15 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.util.ReferenceCountUtil;
 
-/**
- * Created by yaozb on 15-4-11.
- */
-public class NettyServerHandler extends SimpleChannelInboundHandler<BaseMsg> {
+public class NettyServerHandler extends SimpleChannelInboundHandler {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         NettyChannelMap.remove((SocketChannel)ctx.channel());
     }
     
-    protected void messageReceived(ChannelHandlerContext channelHandlerContext, BaseMsg baseMsg) throws Exception {
+    protected void messageReceived(ChannelHandlerContext channelHandlerContext, String msg) throws Exception {
 
+    	BaseMsg baseMsg = new Gson().fromJson(msg, BaseMsg.class);
         if(MsgType.LOGIN.equals(baseMsg.getType())){
             NettyChannelMap.add(baseMsg.getClientId(),(SocketChannel)channelHandlerContext.channel());
             System.out.println("client"+baseMsg.getClientId()+" log on to server successfully!");
@@ -61,10 +61,14 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<BaseMsg> {
     	// TODO Auto-generated method stub
     	System.out.println(cause.getMessage());
     }
+	
+
 	@Override
-	protected void channelRead0(ChannelHandlerContext arg0, BaseMsg arg1)
+	protected void channelRead0(ChannelHandlerContext arg0, Object arg1)
 			throws Exception {
 		// TODO Auto-generated method stub
-		messageReceived(arg0,arg1);
+		messageReceived(arg0,(String)arg1);
 	}
+
+	
 }
