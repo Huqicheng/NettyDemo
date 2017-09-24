@@ -19,13 +19,12 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<BaseMsg> {
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, BaseMsg baseMsg) throws Exception {
 
         if(MsgType.LOGIN.equals(baseMsg.getType())){
-            
             NettyChannelMap.add(baseMsg.getClientId(),(SocketChannel)channelHandlerContext.channel());
-            System.out.println("client"+baseMsg.getClientId()+" 登录成功");
+            System.out.println("client"+baseMsg.getClientId()+" log on to server successfully!");
         
         }else{
             if(NettyChannelMap.get(baseMsg.getClientId())==null){
-                    //说明未登录，或者连接断了，服务器向客户端发起登录请求，让客户端重新登录
+                    //the client has not authenticated,notify the client to log in
                     BaseMsg loginMsg=new BaseMsg();
                     loginMsg.setType(MsgType.LOGIN);
                     channelHandlerContext.channel().writeAndFlush(loginMsg);
@@ -35,6 +34,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<BaseMsg> {
             case PING:{
                 BaseMsg replyPing=new BaseMsg();
                 replyPing.setType(MsgType.PING);
+                
                 NettyChannelMap.get(baseMsg.getClientId()).writeAndFlush(replyPing);
             }break;
             case ASK:{
@@ -54,6 +54,12 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<BaseMsg> {
             default:break;
         }
         ReferenceCountUtil.release(baseMsg);
+    }
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+    		throws Exception {
+    	// TODO Auto-generated method stub
+    	System.out.println(cause.getMessage());
     }
 	@Override
 	protected void channelRead0(ChannelHandlerContext arg0, BaseMsg arg1)

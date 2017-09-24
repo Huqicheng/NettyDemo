@@ -17,10 +17,9 @@ import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.util.concurrent.TimeUnit;
 
-
+import utils.ClientUtils;
 import message.BaseMsg;
 import message.Constants;
-
 import message.MsgType;
 
 
@@ -57,10 +56,10 @@ public class NettyClientBootstrap {
         }
     }
     public static void main(String[]args) throws InterruptedException {
-        Constants.setClientId("001");
-        NettyClientBootstrap bootstrap=new NettyClientBootstrap(9999,"localhost");
+        NettyClientBootstrap bootstrap=ClientUtils.getInstance();
 
         BaseMsg loginMsg=new BaseMsg();
+        loginMsg.setClientId("001");
         loginMsg.setType(MsgType.LOGIN);
         loginMsg.putParams("user", "huqicheng");
         loginMsg.putParams("pwd", "huqicheng");

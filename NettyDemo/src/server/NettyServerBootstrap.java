@@ -11,6 +11,7 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 
 import java.util.concurrent.TimeUnit;
 
+import utils.ServerWriteUtils;
 import container.NettyChannelMap;
 import message.BaseMsg;
 import message.MsgType;
@@ -49,7 +50,8 @@ public class NettyServerBootstrap {
         }
     }
     public static void main(String []args) throws InterruptedException {
-        NettyServerBootstrap bootstrap=new NettyServerBootstrap(9999);
+    	
+        NettyServerBootstrap bootstrap=ServerWriteUtils.getInstance();
         while (true){
             SocketChannel channel=(SocketChannel)NettyChannelMap.get("001");
             if(channel!=null){
