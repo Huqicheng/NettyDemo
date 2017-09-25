@@ -17,6 +17,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
     
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, String msg) throws Exception {
 
+    	System.out.println(msg);
     	BaseMsg baseMsg = new Gson().fromJson(msg, BaseMsg.class);
         if(MsgType.LOGIN.equals(baseMsg.getType())){
             NettyChannelMap.add(baseMsg.getClientId(),(SocketChannel)channelHandlerContext.channel());

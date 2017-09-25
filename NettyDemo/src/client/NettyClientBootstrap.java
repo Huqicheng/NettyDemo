@@ -8,17 +8,25 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.SSLEngine;
+
 import com.google.gson.Gson;
 
+import server.SslContextFactory;
 import utils.ClientUtils;
 import message.BaseMsg;
 import message.Constants;
@@ -29,7 +37,6 @@ public class NettyClientBootstrap {
     private int port;
     private String host;
     private SocketChannel socketChannel;
-    private static final EventExecutorGroup group = new DefaultEventExecutorGroup(20);
     public NettyClientBootstrap(int port, String host) throws InterruptedException {
         this.port = port;
         this.host = host;
@@ -45,9 +52,20 @@ public class NettyClientBootstrap {
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
-                socketChannel.pipeline().addLast(new IdleStateHandler(20,10,0));
-                socketChannel.pipeline().addLast(new ObjectEncoder());
-                socketChannel.pipeline().addLast(new ObjectDecoder(ClassResolvers.cacheDisabled(null)));
+            	SSLEngine engine = SslContextFactory.getClientContext().createSSLEngine();
+            	engine.setUseClientMode(true);
+                engine.setWantClientAuth(false);
+                
+            	socketChannel.pipeline().addLast(new IdleStateHandler(20,10,0));
+            	socketChannel.pipeline().addLast(new SslHandler(engine));
+
+                // On top of the SSL handler, add the text line codec.
+            	//
+            	//socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
+                
+                socketChannel.pipeline().addLast(new StringEncoder());
+                socketChannel.pipeline().addLast(new StringEncoder());
+                //socketChannel.pipeline().addLast("length-decoder", new LengthFieldBasedFrameDecoder(369295620, 0, 4, 0, 4));
                 socketChannel.pipeline().addLast(new NettyClientHandler());
             }
         });

@@ -8,7 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.ReferenceCountUtil;
 
-public class NettyClientHandler extends SimpleChannelInboundHandler {
+public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
@@ -60,10 +60,10 @@ public class NettyClientHandler extends SimpleChannelInboundHandler {
     }
     
 	@Override
-	protected void channelRead0(ChannelHandlerContext arg0, Object arg1)
+	protected void channelRead0(ChannelHandlerContext arg0, String arg1)
 			throws Exception {
 		// TODO Auto-generated method stub
-		messageReceived(arg0,(String)arg1);
+		messageReceived(arg0,arg1);
 	}
 	
 }

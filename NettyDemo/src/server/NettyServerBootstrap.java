@@ -5,11 +5,19 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.ssl.SslHandler;
 
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLEngine;
 
 import com.google.gson.Gson;
 
@@ -29,6 +37,7 @@ public class NettyServerBootstrap {
     }
 
     private void bind() throws InterruptedException {
+    	
         EventLoopGroup boss=new NioEventLoopGroup();
         EventLoopGroup worker=new NioEventLoopGroup();
         ServerBootstrap bootstrap=new ServerBootstrap();
@@ -40,10 +49,18 @@ public class NettyServerBootstrap {
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
+            	SSLEngine sslEngine = SslContextFactory.getServerContext().createSSLEngine();
+                sslEngine.setUseClientMode(false);
+                sslEngine.setWantClientAuth(false);
+                
                 ChannelPipeline p = socketChannel.pipeline();
-                p.addLast(new ObjectEncoder());
-                p.addLast(new ObjectDecoder(ClassResolvers.cacheDisabled(null)));
+                //
+                p.addLast(new SslHandler(sslEngine));
+                p.addLast(new StringEncoder());
+                p.addLast(new StringDecoder());
+                
                 p.addLast(new NettyServerHandler());
+                
             }
         });
         ChannelFuture f= bootstrap.bind(port).sync();
