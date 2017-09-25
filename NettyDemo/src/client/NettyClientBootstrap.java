@@ -14,6 +14,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.timeout.IdleStateHandler;
@@ -55,18 +56,20 @@ public class NettyClientBootstrap {
             	SSLEngine engine = SslContextFactory.getClientContext().createSSLEngine();
             	engine.setUseClientMode(true);
                 engine.setWantClientAuth(false);
-                
-            	socketChannel.pipeline().addLast(new IdleStateHandler(20,10,0));
-            	socketChannel.pipeline().addLast(new SslHandler(engine));
+                socketChannel.pipeline().addLast(new SslHandler(engine));
+            	
+            	
 
                 // On top of the SSL handler, add the text line codec.
             	//
             	//socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
                 
                 socketChannel.pipeline().addLast(new StringEncoder());
-                socketChannel.pipeline().addLast(new StringEncoder());
+                socketChannel.pipeline().addLast(new StringDecoder());
                 //socketChannel.pipeline().addLast("length-decoder", new LengthFieldBasedFrameDecoder(369295620, 0, 4, 0, 4));
+                socketChannel.pipeline().addLast(new IdleStateHandler(20,10,0));
                 socketChannel.pipeline().addLast(new NettyClientHandler());
+                
             }
         });
         ChannelFuture future =bootstrap.connect(host,port).sync();

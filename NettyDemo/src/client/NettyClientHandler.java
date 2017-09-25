@@ -26,6 +26,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
         }
     }
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, String msg) throws Exception {
+    	System.out.println(msg);
         BaseMsg baseMsg = new Gson().fromJson(msg, BaseMsg.class);
     	MsgType msgType=baseMsg.getType();
         switch (msgType){
