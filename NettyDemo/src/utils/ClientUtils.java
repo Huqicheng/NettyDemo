@@ -20,7 +20,8 @@ public class ClientUtils {
 		Constants.setClientId("002");
         try {
 			client=new NettyClientBootstrap(8080,"localhost");
-		} catch (InterruptedException e) {
+			client.start();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
 		}

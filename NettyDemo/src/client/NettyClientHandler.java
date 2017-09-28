@@ -1,14 +1,41 @@
 package client;
 
+import java.util.concurrent.TimeUnit;
+
+import utils.ClientUtils;
+
 import com.google.gson.Gson;
 
+import container.NettyChannelMap;
 import message.*;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.ReferenceCountUtil;
 
 public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
+	@Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		super.channelInactive(ctx);
+
+        //reconnect to server
+        ctx.channel().eventLoop().schedule(new Runnable() {
+            @Override
+            public void run() {
+            	NettyClientBootstrap client = ClientUtils.getInstance();
+            	try {
+					client.start();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+        }, 2, TimeUnit.SECONDS);
+        ctx.close();
+    }
+	
+	
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
@@ -58,6 +85,13 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
             default:break;
         }
         ReferenceCountUtil.release(msgType);
+    }
+    
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+    		throws Exception {
+    	// TODO Auto-generated method stub
+    	System.out.println("Error: "+cause.getMessage());
     }
     
 	@Override

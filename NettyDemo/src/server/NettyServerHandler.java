@@ -60,7 +60,8 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
     		throws Exception {
     	// TODO Auto-generated method stub
-    	System.out.println(cause.getMessage());
+    	System.out.println("Error: "+cause.getMessage());
+    	NettyChannelMap.remove((SocketChannel)ctx.channel());
     }
 	
 

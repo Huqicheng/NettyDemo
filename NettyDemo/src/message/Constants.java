@@ -9,8 +9,5 @@ public class Constants {
 	public static void setClientId(String id) {
 		clientId = id;
 	}
-	//keywords
-    public static final String pwd = "pwd";
-    public static final String user = "user";
-    public static final String body = "body";
+	
 }

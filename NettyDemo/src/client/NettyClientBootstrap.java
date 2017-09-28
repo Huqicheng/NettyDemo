@@ -2,8 +2,10 @@ package client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoop;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -35,15 +37,51 @@ import message.MsgType;
 
 
 public class NettyClientBootstrap {
-    private int port;
-    private String host;
-    private SocketChannel socketChannel;
-    public NettyClientBootstrap(int port, String host) throws InterruptedException {
+    private static int port;
+    private static String host;
+    private static SocketChannel socketChannel;
+    private int seconds = 1;
+    public NettyClientBootstrap(int port, String host) {
         this.port = port;
         this.host = host;
-        start();
     }
-    private void start() throws InterruptedException {
+    
+    private class ConnectionListener implements ChannelFutureListener {  
+    	  
+    	  
+        private NettyClientBootstrap client;  
+        
+      
+        public ConnectionListener(NettyClientBootstrap client) {  
+            this.client = client;  
+        }  
+      
+      
+        @Override  
+        public void operationComplete(ChannelFuture future) throws Exception {  
+            if (!future.isSuccess()) {  
+            	seconds = (seconds>=16)? seconds:seconds*2;
+                System.out.println("Reconnection in "+seconds+" seconds");  
+                final EventLoop eventLoop = future.channel().eventLoop();  
+                eventLoop.schedule(new Runnable() {  
+      
+      
+                    @Override  
+                    public void run() {  
+                        try {
+                        	client.start();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+                    }  
+                }, seconds, TimeUnit.SECONDS);  
+            }  
+        }  
+      
+      
+    }  
+    public void start() throws InterruptedException {
         EventLoopGroup eventLoopGroup=new NioEventLoopGroup();
         Bootstrap bootstrap=new Bootstrap();
         bootstrap.channel(NioSocketChannel.class);
@@ -72,7 +110,7 @@ public class NettyClientBootstrap {
                 
             }
         });
-        ChannelFuture future =bootstrap.connect(host,port).sync();
+        ChannelFuture future =bootstrap.connect(host,port).addListener(new ConnectionListener(this)).sync();
         if (future.isSuccess()) {
             socketChannel = (SocketChannel)future.channel();
             System.out.println("connect server  成功---------");
@@ -86,7 +124,10 @@ public class NettyClientBootstrap {
         loginMsg.setType(MsgType.LOGIN);
         loginMsg.putParams("user", "huqicheng");
         loginMsg.putParams("pwd", "huqicheng");
-        bootstrap.socketChannel.writeAndFlush(new Gson().toJson(loginMsg));
+        if(bootstrap != null){
+        	bootstrap.socketChannel.writeAndFlush(new Gson().toJson(loginMsg));
+        }
+        
 //        while (true){
 //            TimeUnit.SECONDS.sleep(3);
 //            BaseMsg askMsg=new BaseMsg();

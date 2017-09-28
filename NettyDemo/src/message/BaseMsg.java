@@ -1,6 +1,7 @@
 package message;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,17 +10,25 @@ import java.util.Map;
 public class BaseMsg  implements Serializable {
     private static final long serialVersionUID = 1L;
     private MsgType type;
-    //必须唯一，否者会出现channel调用混乱
     private String clientId;
     private String groupId;
+    private Date date;
     private Map<String,Object> params;
-    //初始化客户端id
+    
     public BaseMsg() {
         this.clientId = Constants.getClientId();
         params = new HashMap<String,Object>();
     }
+    
+    public Date getDate() {
+		return date;
+	}
 
-    public String getClientId() {
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public String getClientId() {
         return clientId;
     }
 

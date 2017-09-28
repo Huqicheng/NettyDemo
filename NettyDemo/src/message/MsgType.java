@@ -2,5 +2,35 @@ package message;
 
 
 public enum  MsgType {
-    PING,ASK,REPLY,LOGIN
+	/*
+	 * heart beat
+	 * params : None
+	 */
+    PING,
+    /*
+     * 
+     */
+    ASK,
+    /*
+     * 
+     */
+    REPLY,
+    /*
+     * Authentication
+     * params: cookie.clientId -- String
+     *         clientVersion -- Long(optional)
+     */
+    LOGIN,
+    /*
+     * Group Chat
+     * params: body -- String         
+     */
+    ChatMsg,
+    /*
+     * Reply for ChatMsg
+     * params: body -- String (exactly same as ChatMsg)
+     *         status -- Integer    
+     */
+    ReplyForChatMsg
+    
 }
