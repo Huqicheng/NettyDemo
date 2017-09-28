@@ -1,6 +1,3 @@
-/dao/
-/service/
-/message/
-/client/
-/server/
+/test/
 /utils/
+/service/

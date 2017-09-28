@@ -13,6 +13,7 @@ public class RedisService {
 	}
 	
 	public void saveMessage(String key, String message){
+		System.out.println("saveMessage:"+message);
 		dao.SaveMessage(key, message);
 	}
 	
