@@ -7,6 +7,10 @@ import java.util.Map;
 
 
 
+/**
+ * @author huqic_000
+ *
+ */
 public class BaseMsg  implements Serializable {
     private static final long serialVersionUID = 1L;
     private MsgType type;

@@ -13,6 +13,10 @@ import java.util.List;
 import message.BaseMsg;
 import utils.Dbconn;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class GroupDao {
 
 	public List<String> getGroups(String clientId) throws SQLException{

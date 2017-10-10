@@ -16,11 +16,10 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+
 /**
- * HTTP工具类
- * 
- * @author lixiangyang
- * 
+ * @author huqic_000
+ *
  */
 public class HttpUtils {
 

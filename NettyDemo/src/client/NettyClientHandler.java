@@ -14,6 +14,10 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.ReferenceCountUtil;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
 	@Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {

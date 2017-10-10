@@ -16,6 +16,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Enumeration;
 import java.util.Vector;
+/**
+ * @author huqic_000
+ *
+ */
 public class ConnectionPool {
 private String jdbcDriver = ""; // 数据库驱动
 private String dbUrl = ""; // 数据 URL

@@ -4,6 +4,10 @@ import java.util.List;
 
 import dao.JredisDao;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class RedisService {
 
 	private JredisDao dao = null;

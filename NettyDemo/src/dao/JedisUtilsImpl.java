@@ -5,6 +5,10 @@ import redis.clients.jedis.JedisPoolConfig;
 
 
 import org.apache.commons.pool.impl.GenericObjectPool;  
+/**
+ * @author huqic_000
+ *
+ */
 public class JedisUtilsImpl extends JedisUtils{
 
 	  

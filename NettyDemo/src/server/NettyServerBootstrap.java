@@ -28,6 +28,10 @@ import message.MsgType;
 
 
 
+/**
+ * @author huqic_000
+ *
+ */
 public class NettyServerBootstrap {
     private int port;
     private SocketChannel socketChannel;

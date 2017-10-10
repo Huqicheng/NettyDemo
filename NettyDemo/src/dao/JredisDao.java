@@ -6,6 +6,10 @@ import redis.clients.jedis.Jedis;
 
 
 
+/**
+ * @author huqic_000
+ *
+ */
 public class JredisDao {
 
     static int MAX_MESSAGE_QUEUE = 10;

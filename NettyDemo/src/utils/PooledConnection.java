@@ -4,6 +4,10 @@ package utils;
 
 import java.sql.Connection;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class PooledConnection {
     Connection connection = null; // 数据库连接
     boolean busy = false; // 此连接是否正在使用的标志，默认没有正在使用

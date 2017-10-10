@@ -1,5 +1,6 @@
 package server;
 
+import service.CommandService;
 import service.NettyService;
 
 import com.google.gson.Gson;
@@ -11,6 +12,10 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.util.ReferenceCountUtil;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class NettyServerHandler extends SimpleChannelInboundHandler {
 	NettyService ns = new NettyService();
     @Override
@@ -24,7 +29,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
     	System.out.println(msg);
     	BaseMsg baseMsg = new Gson().fromJson(msg, BaseMsg.class);
     	if(MsgType.Debug.equals(baseMsg.getType())){
-    		
+    		new CommandService().execute(channelHandlerContext.channel(), baseMsg);
     		
     		return;
     	}
@@ -61,6 +66,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
                 //收到客户端回复
                 System.out.println("receive client msg: "+baseMsg.getParams().get("body"));
             }break;
+            
             default:break;
         }
         ReferenceCountUtil.release(baseMsg);

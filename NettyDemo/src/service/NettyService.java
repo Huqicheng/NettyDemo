@@ -116,7 +116,7 @@ public class NettyService {
 	*/
 	public String pushGroupMsg(BaseMsg baseMsg, Channel channel) throws SQLException{
 		if(baseMsg.getGroupId() == null){
-			log.error("");
+			log.error("groupId is not existed");
 			return FAILED;
 		}
 		baseMsg.setTimeStamp(new Date().getTime());

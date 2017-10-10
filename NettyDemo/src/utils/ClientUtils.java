@@ -4,6 +4,10 @@ import message.BaseMsg;
 import message.Constants;
 import client.NettyClientBootstrap;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class ClientUtils {
 	private static NettyClientBootstrap client = null;
 	

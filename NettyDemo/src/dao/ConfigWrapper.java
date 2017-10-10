@@ -6,6 +6,10 @@ package dao;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
 
+/**
+ * @author huqic_000
+ *
+ */
 public class ConfigWrapper {
 
     private final GenericObjectPool.Config config;

@@ -10,6 +10,10 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class SslContextFactory {
     private static final String PROTOCOL = "TLS";
     private static final String CKMF_PATH = "resources/cChat.jks";

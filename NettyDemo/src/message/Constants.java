@@ -1,5 +1,9 @@
 package message;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class Constants {
     private static String clientId;
     

@@ -6,6 +6,10 @@ import server.NettyServerBootstrap;
 import message.BaseMsg;
 import io.netty.channel.socket.SocketChannel;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class ServerWriteUtils {
 	private static NettyServerBootstrap bootstrap = null;
 	

@@ -1,6 +1,10 @@
 package message;
 
 
+/**
+ * @author huqic_000
+ *
+ */
 public enum  MsgType {
 	/*
 	 * heart beat

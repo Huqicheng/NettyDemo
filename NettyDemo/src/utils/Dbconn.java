@@ -2,6 +2,10 @@ package utils;
 import java.sql.*;
 
 
+/**
+ * @author huqic_000
+ *
+ */
 public class Dbconn {
 	public static String driver = "com.mysql.jdbc.Driver";
     public static String URL = "jdbc:mysql://127.0.0.1/projectmanager?useunicode=true&characterEncoding=utf-8";

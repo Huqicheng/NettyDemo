@@ -6,17 +6,22 @@ import container.NettyChannelMap;
 import message.BaseMsg;
 import io.netty.channel.Channel;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class CommandService {
 
 	private String doExecute(String command){
 		String str = "";
 		if(command.startsWith("online")){
 			String clientId = command.substring(6).trim();
+			System.out.println(clientId);
 			if(NettyChannelMap.get(clientId) == null){
-				str = "client"+clientId+"is not online";
+				str = "client"+clientId+" is not online";
 			}
 			else{
-				str = "client"+clientId+"online";
+				str = "client"+clientId+" is online";
 			}
 			
 			return str;

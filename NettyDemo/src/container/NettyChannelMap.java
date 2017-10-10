@@ -9,6 +9,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
 
+/**
+ * @author huqic_000
+ *
+ */
 public class NettyChannelMap {
     private static Map<String,Map<String,Channel>> map=new ConcurrentHashMap<String, Map<String,Channel>>();
     private static Map<String,Channel> mapForNotification = new ConcurrentHashMap<String,Channel >();

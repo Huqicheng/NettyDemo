@@ -4,6 +4,10 @@ import com.googlecode.asyn4j.core.handler.CacheAsynWorkHandler;
 import com.googlecode.asyn4j.service.AsynService;
 import com.googlecode.asyn4j.service.AsynServiceImpl;
 
+/**
+ * @author huqic_000
+ *
+ */
 public class AsyncTaskWrapper {
 	private static AsynService anycService = null;
 	

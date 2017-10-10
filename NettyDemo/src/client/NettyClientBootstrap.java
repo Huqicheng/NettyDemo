@@ -39,6 +39,10 @@ import message.Constants;
 import message.MsgType;
 
 
+/**
+ * @author huqic_000
+ *
+ */
 public class NettyClientBootstrap {
     private static int port;
     private static String host;

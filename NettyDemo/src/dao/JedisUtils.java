@@ -10,19 +10,14 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.exceptions.JedisException;
 
+/**
+ * @author huqic_000
+ *
+ */
 public abstract class JedisUtils {
     public abstract int getDBIndex();
     public abstract String getKeyByCliGrp(String clientId, String groupId);
-//    /**
-//     * 默认日志打印logger_default
-//     */
-//    public static Logger logger_default = Logger.getLogger("logger_jCache_default");
-//    /**
-//     * 失败日志logger，用于定期del指定的key
-//     */
-//    public static Logger logger_failure = Logger.getLogger("logger_jCache_failure");
 
-    
     protected JedisPool jedisPool;
 
     protected Jedis getJedis() throws JedisException {
