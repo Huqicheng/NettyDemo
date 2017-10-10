@@ -23,6 +23,9 @@ import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLEngine;
@@ -91,10 +94,10 @@ public class NettyClientBootstrap {
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
-            	SSLEngine engine = SslContextFactory.getClientContext().createSSLEngine();
-            	engine.setUseClientMode(true);
-                engine.setWantClientAuth(false);
-                socketChannel.pipeline().addLast(new SslHandler(engine));
+//            	SSLEngine engine = SslContextFactory.getClientContext().createSSLEngine();
+//            	engine.setUseClientMode(true);
+//                engine.setWantClientAuth(false);
+//                socketChannel.pipeline().addLast(new SslHandler(engine));
             	
             	
 
@@ -113,20 +116,43 @@ public class NettyClientBootstrap {
         ChannelFuture future =bootstrap.connect(host,port).addListener(new ConnectionListener(this)).sync();
         if (future.isSuccess()) {
             socketChannel = (SocketChannel)future.channel();
+            this.seconds = 1;
             System.out.println("connect server  成功---------");
         }
     }
+    
+    public static String ReadTest(){   
+        //System.out.println("ReadTest, Please Enter Data:");   
+        InputStreamReader is = new InputStreamReader(System.in); //new构造InputStreamReader对象   
+        BufferedReader br = new BufferedReader(is); //拿构造的方法传到BufferedReader中   
+        try{  
+          String cmd = br.readLine();   
+          //System.out.println("ReadTest Output:" + name); 
+          return cmd;
+        }   
+        catch(IOException e){   
+          e.printStackTrace();   
+        }   
+        return "";
+            
+      }   
     public static void main(String[]args){
     	System.out.println("start");
+    	Constants.setClientId("debug");
         NettyClientBootstrap bootstrap=ClientUtils.getInstance();
-
-        BaseMsg loginMsg=new BaseMsg();
-        loginMsg.setType(MsgType.LOGIN);
-        loginMsg.putParams("user", "huqicheng");
-        loginMsg.putParams("pwd", "huqicheng");
-        if(bootstrap != null){
-        	bootstrap.socketChannel.writeAndFlush(new Gson().toJson(loginMsg));
+        BaseMsg login=new BaseMsg();
+        login.setType(MsgType.LOGIN);
+        bootstrap.socketChannel.writeAndFlush(new Gson().toJson(login));
+        String s = ReadTest().trim();
+        while(!s.equals("exit")){
+        	BaseMsg askMsg=new BaseMsg();
+        	askMsg.setType(MsgType.Debug);
+        	askMsg.putParams("body", s);
+        	bootstrap.socketChannel.writeAndFlush(new Gson().toJson(askMsg));
+        	s = ReadTest().trim();
         }
+        
+        
         
 //        while (true){
 //            TimeUnit.SECONDS.sleep(3);

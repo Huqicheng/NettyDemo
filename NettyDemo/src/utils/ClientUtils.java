@@ -17,7 +17,7 @@ public class ClientUtils {
 
 	private static void startClient() {
 		// TODO Auto-generated method stub
-		Constants.setClientId("002");
+		
         try {
 			client=new NettyClientBootstrap(8080,"localhost");
 			client.start();

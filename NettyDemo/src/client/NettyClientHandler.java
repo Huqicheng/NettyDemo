@@ -45,7 +45,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
                     BaseMsg pingMsg=new BaseMsg();
                     pingMsg.setType(MsgType.PING);
                     ctx.writeAndFlush(new Gson().toJson(pingMsg));
-                    System.out.println("send ping to server----------");
+                    //System.out.println("send ping to server----------");
                     break;
                 default:
                     break;
@@ -53,25 +53,25 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
         }
     }
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, String msg) throws Exception {
-    	System.out.println(msg);
+    	//System.out.println(msg);
         BaseMsg baseMsg = new Gson().fromJson(msg, BaseMsg.class);
     	MsgType msgType=baseMsg.getType();
         switch (msgType){
             case LOGIN:{
                 //向服务器发起登录
-            	BaseMsg loginMsg=new BaseMsg();
-                loginMsg.setType(MsgType.LOGIN);
-                loginMsg.putParams("user", "huqicheng");
-                loginMsg.putParams("pwd", "huqicheng");
-                channelHandlerContext.writeAndFlush(new Gson().toJson(loginMsg));
+//            	BaseMsg loginMsg=new BaseMsg();
+//                loginMsg.setType(MsgType.LOGIN);
+//                loginMsg.putParams("user", "huqicheng");
+//                loginMsg.putParams("pwd", "huqicheng");
+//                channelHandlerContext.writeAndFlush(new Gson().toJson(loginMsg));
             }break;
             case PING:{
-                System.out.println("receive ping from server----------");
-                BaseMsg replyMsg=new BaseMsg();
-            	replyMsg.setType(MsgType.REPLY);
-                replyMsg.putParams("body", "reply for ping");
+                //System.out.println("receive ping from server----------");
+//                BaseMsg replyMsg=new BaseMsg();
+//            	replyMsg.setType(MsgType.REPLY);
+//                replyMsg.putParams("body", "reply for ping");
                 
-                channelHandlerContext.writeAndFlush(new Gson().toJson(replyMsg));
+                //channelHandlerContext.writeAndFlush(new Gson().toJson(replyMsg));
             }break;
             case ASK:{
             	BaseMsg replyMsg=new BaseMsg();
@@ -80,7 +80,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
                 channelHandlerContext.writeAndFlush(new Gson().toJson(replyMsg));
             }break;
             case REPLY:{
-                System.out.println("receive client msg: "+baseMsg.getParams().get("body"));
+                //System.out.println("receive client msg: "+baseMsg.getParams().get("body"));
             }
             default:break;
         }

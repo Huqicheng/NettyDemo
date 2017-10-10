@@ -5,11 +5,7 @@ package dao;
 
 import org.apache.commons.pool.impl.GenericObjectPool;
 
-/**
- * User: ***
- * Date: 13-8-27
- * Time: 下午3:49
- */
+
 public class ConfigWrapper {
 
     private final GenericObjectPool.Config config;

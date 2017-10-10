@@ -12,7 +12,7 @@ public class BaseMsg  implements Serializable {
     private MsgType type;
     private String clientId;
     private String groupId;
-    private Date date;
+    private long timeStamp;
     private Map<String,Object> params;
     
     public BaseMsg() {
@@ -20,13 +20,19 @@ public class BaseMsg  implements Serializable {
         params = new HashMap<String,Object>();
     }
     
-    public Date getDate() {
-		return date;
+    
+
+	public long getTimeStamp() {
+		return timeStamp;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+
+
+	public void setTimeStamp(long timeStamp) {
+		this.timeStamp = timeStamp;
 	}
+
+
 
 	public String getClientId() {
         return clientId;

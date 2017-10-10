@@ -31,6 +31,13 @@ public enum  MsgType {
      * params: body -- String (exactly same as ChatMsg)
      *         status -- Integer    
      */
-    ReplyForChatMsg
+    ReplyForChatMsg,
+   
+    /*
+     * For Debug
+     * params: body -- command
+     *         
+     */ 
+    Debug
     
 }

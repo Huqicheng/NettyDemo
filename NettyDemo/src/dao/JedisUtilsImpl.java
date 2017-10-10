@@ -26,6 +26,10 @@ public class JedisUtilsImpl extends JedisUtils{
 		return 1;
 	}
 	
+	@Override
+	public String getKeyByCliGrp(String clientId, String groupId){
+		return "client"+clientId+"@group"+groupId;
+	}
 	public JedisUtilsImpl(){
 		ConfigWrapper configWrapper = new ConfigWrapper();
 		configWrapper.setMaxActive(MAX_ACTIVE);

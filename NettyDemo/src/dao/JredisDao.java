@@ -31,6 +31,13 @@ public class JredisDao {
         return messageList;
     }
 
+    public String getKeyByCliGrp(String clientId, String groupId){
+    	return impl.getKeyByCliGrp(clientId, groupId);
+    }
+    
+    public String getNotificationKey(String clientId){
+    	return impl.getKeyByCliGrp(clientId, "notification");
+    }
     public void SAMPLE_MessageQueue()
     { 	
     	for (int i = 0; i < 1000; i++)

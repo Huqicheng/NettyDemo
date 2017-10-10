@@ -1,3 +1,10 @@
+/Config/
+/Log4j.properties
+/client/
+/container/
+/dao/
+/message/
+/server/
+/service/
 /test/
 /utils/
-/service/

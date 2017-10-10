@@ -12,6 +12,7 @@ import redis.clients.jedis.exceptions.JedisException;
 
 public abstract class JedisUtils {
     public abstract int getDBIndex();
+    public abstract String getKeyByCliGrp(String clientId, String groupId);
 //    /**
 //     * 默认日志打印logger_default
 //     */
@@ -28,7 +29,7 @@ public abstract class JedisUtils {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            jedis.auth("redis");
+            //jedis.auth("redis");
         } catch (JedisException e) {
             //LogContext.instance().warn(logger_failure, "failed:jedisPool getResource.", e);
             if(jedis!=null){

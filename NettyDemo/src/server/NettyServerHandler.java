@@ -1,5 +1,7 @@
 package server;
 
+import service.NettyService;
+
 import com.google.gson.Gson;
 
 import container.NettyChannelMap;
@@ -10,18 +12,25 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.util.ReferenceCountUtil;
 
 public class NettyServerHandler extends SimpleChannelInboundHandler {
+	NettyService ns = new NettyService();
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        NettyChannelMap.remove((SocketChannel)ctx.channel());
+    	
+    	ns.doLogout(ctx.channel());
     }
     
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, String msg) throws Exception {
 
     	System.out.println(msg);
     	BaseMsg baseMsg = new Gson().fromJson(msg, BaseMsg.class);
+    	if(MsgType.Debug.equals(baseMsg.getType())){
+    		
+    		
+    		return;
+    	}
         if(MsgType.LOGIN.equals(baseMsg.getType())){
-            NettyChannelMap.add(baseMsg.getClientId(),(SocketChannel)channelHandlerContext.channel());
-            System.out.println("client"+baseMsg.getClientId()+" log on to server successfully!");
+            String result = ns.doLogin(baseMsg, channelHandlerContext);
+            
         
         }else{
             if(NettyChannelMap.get(baseMsg.getClientId())==null){

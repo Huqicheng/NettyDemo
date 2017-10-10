@@ -5,7 +5,7 @@ import com.googlecode.asyn4j.service.AsynService;
 import com.googlecode.asyn4j.service.AsynServiceImpl;
 
 public class AsyncTaskWrapper {
-	private AsynService anycService = null;
+	private static AsynService anycService = null;
 	
 	public static AsyncTaskWrapper wrapper = null;
 	

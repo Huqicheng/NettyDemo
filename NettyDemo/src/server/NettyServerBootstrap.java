@@ -49,13 +49,13 @@ public class NettyServerBootstrap {
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
-            	SSLEngine sslEngine = SslContextFactory.getServerContext().createSSLEngine();
-                sslEngine.setUseClientMode(false);
-                sslEngine.setWantClientAuth(false);
+//            	SSLEngine sslEngine = SslContextFactory.getServerContext().createSSLEngine();
+//                sslEngine.setUseClientMode(false);
+//                sslEngine.setWantClientAuth(false);
                 
                 ChannelPipeline p = socketChannel.pipeline();
                 //
-                p.addLast(new SslHandler(sslEngine));
+                //p.addLast(new SslHandler(sslEngine));
                 p.addLast(new StringEncoder());
                 p.addLast(new StringDecoder());
                 
