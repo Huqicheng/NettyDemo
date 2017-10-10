@@ -89,5 +89,35 @@ public class NettyChannelMap {
     		 }
     	 }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+     * statistical
+     */
+    public static String getStatusAll(){
+    	return "";
+    }
+    
+    public static String getStatusGroup(String groupId){
+    	String str = "";
+    	Map<String, Channel> m = map.get(groupId);
+    	if(m == null) return "";
+    	for (Map.Entry entry:m.entrySet()){
+    		str+=entry.getKey()+",";
+   		 
+   		}
+    	
+    	return str;
+   	 
+    }
 
 }

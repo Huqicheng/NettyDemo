@@ -81,6 +81,9 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
             }break;
             case REPLY:{
                 //System.out.println("receive client msg: "+baseMsg.getParams().get("body"));
+            }break;
+            case Debug:{
+            	System.out.println("result: "+baseMsg.getParams().get("result"));
             }
             default:break;
         }
