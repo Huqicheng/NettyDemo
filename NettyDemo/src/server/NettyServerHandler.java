@@ -2,8 +2,10 @@ package server;
 
 import service.CommandService;
 import service.NettyService;
+import utils.AsyncTaskWrapper;
 
 import com.google.gson.Gson;
+import com.googlecode.asyn4j.service.AsynService;
 
 import container.NettyChannelMap;
 import message.*;
@@ -18,10 +20,11 @@ import io.netty.util.ReferenceCountUtil;
  */
 public class NettyServerHandler extends SimpleChannelInboundHandler {
 	NettyService ns = new NettyService();
+	AsynService anycService = AsyncTaskWrapper.getInstance().getService();
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-    	
-    	ns.doLogout(ctx.channel());
+    	anycService.addWork(ns, "doLogout",new Object[] { ctx.channel()});
+    	//ns.doLogout(ctx.channel());
     }
     
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, String msg) throws Exception {
@@ -33,38 +36,28 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
     		
     		return;
     	}
+    	
         if(MsgType.LOGIN.equals(baseMsg.getType())){
-            String result = ns.doLogin(baseMsg, channelHandlerContext);
+        	anycService.addWork(ns, "doLogin",new Object[] {baseMsg, channelHandlerContext});
+            //String result = ns.doLogin(baseMsg, channelHandlerContext);
             
         
         }else{
             if(NettyChannelMap.get(baseMsg.getClientId())==null){
-                    //the client has not authenticated,notify the client to log in
+                    //To fix, the client has not authenticated,notify the client to log in, client cannot handle this message now.
                     BaseMsg loginMsg=new BaseMsg();
                     loginMsg.setType(MsgType.LOGIN);
                     channelHandlerContext.channel().writeAndFlush(new Gson().toJson(loginMsg));
             }
         }
+        
+        
         switch (baseMsg.getType()){
             case PING:{
-                BaseMsg replyPing=new BaseMsg();
-                replyPing.setType(MsgType.PING);
-                
-                NettyChannelMap.get(baseMsg.getClientId()).writeAndFlush(new Gson().toJson(replyPing));
+               
             }break;
-            case ASK:{
-                //收到客户端的请求
-                if("auth".equals(baseMsg.getParams().get("body"))){
-                    
-                	BaseMsg replyMsg=new BaseMsg();
-                	replyMsg.setType(MsgType.REPLY);
-                    replyMsg.putParams("body", "reply from server");
-                    NettyChannelMap.get(baseMsg.getClientId()).writeAndFlush(new Gson().toJson(replyMsg));
-                }
-            }break;
-            case REPLY:{
-                //收到客户端回复
-                System.out.println("receive client msg: "+baseMsg.getParams().get("body"));
+            case ChatMsg:{
+            	anycService.addWork(ns, "pushGroupMsg",new Object[] {baseMsg, channelHandlerContext.channel()});
             }break;
             
             default:break;

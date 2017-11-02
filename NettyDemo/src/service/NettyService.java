@@ -7,7 +7,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import utils.AsyncTaskWrapper;
+
 import com.google.gson.Gson;
+import com.googlecode.asyn4j.service.AsynService;
 
 import message.BaseMsg;
 import message.MsgType;
@@ -29,6 +32,7 @@ public class NettyService {
 	public static final String FAILED = "fail";
 	private JredisDao jdeisDao = null;
 	private GroupDao groupDao = null;
+	
 	public NettyService() {
 		jdeisDao = new JredisDao();
 		groupDao = new GroupDao();
@@ -68,7 +72,7 @@ public class NettyService {
 					NettyChannelMap.addOneGroup(id);
 					
 				}
-				msgList.addAll(jdeisDao.getRecentMessage(jdeisDao.getKeyByCliGrp(baseMsg.getClientId(), id)));
+				//msgList.addAll(jdeisDao.getRecentMessage(jdeisDao.getKeyByCliGrp(baseMsg.getClientId(), id)));
 				//add channel to group map
 				NettyChannelMap.addToGroup(baseMsg.getClientId(), id, (SocketChannel)channelHandlerContext.channel());
 			}
@@ -79,7 +83,7 @@ public class NettyService {
 			//send msgList to client
 			BaseMsg replyForLogin = new BaseMsg();
 			replyForLogin.setType(MsgType.LOGIN);
-			replyForLogin.putParams("msgList", new Gson().toJson(msgList));
+			//replyForLogin.putParams("msgList", new Gson().toJson(msgList));
 			channelHandlerContext.channel().writeAndFlush(new Gson().toJson(replyForLogin));
 			
 			
@@ -100,6 +104,7 @@ public class NettyService {
 	* @throws 
 	*/
 	public String doLogout(Channel channel){
+		channel.close();
 		NettyChannelMap.remove(channel);
 		return SUCCESS;
 	}
@@ -119,19 +124,19 @@ public class NettyService {
 			log.error("groupId is not existed");
 			return FAILED;
 		}
-		baseMsg.setTimeStamp(new Date().getTime());
+		baseMsg.setDate(baseMsg.getDate());
 		
 		String str = new Gson().toJson(baseMsg);
 		
-		//persist baseMsg to database 
+		//persist baseMsg to database , not be implemented yet
 		groupDao.saveMsg(baseMsg);
 		
 		List<String> list = groupDao.getClientsOfGroup(baseMsg.getGroupId());
 		for(String clientId:list){
 			Channel ch = NettyChannelMap.getClientFromGroup(clientId, baseMsg.getGroupId());
-			if(ch == null){
+			if(ch == null || clientId.equals(baseMsg.getClientId())){
 				//add msg to redis cache
-				jdeisDao.SaveMessage(jdeisDao.getKeyByCliGrp(clientId, baseMsg.getGroupId()),str );
+				//jdeisDao.SaveMessage(jdeisDao.getKeyByCliGrp(clientId, baseMsg.getGroupId()),str );
 				continue;
 			}
 			ch.writeAndFlush(str);
@@ -141,6 +146,11 @@ public class NettyService {
 			return FAILED;
 		}
 		
+		//resend reply to sender of this message(new msg contains timestamp and status)
+		BaseMsg reply = baseMsg;
+		reply.setType(MsgType.ReplyForChatMsg);
+		reply.setParams("status", "success");
+		channel.writeAndFlush(new Gson().toJson(reply));
 		
 		return SUCCESS;
 	}

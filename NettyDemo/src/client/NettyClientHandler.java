@@ -77,18 +77,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
                 
                 //channelHandlerContext.writeAndFlush(new Gson().toJson(replyMsg));
             }break;
-            case ASK:{
-            	BaseMsg replyMsg=new BaseMsg();
-            	replyMsg.setType(MsgType.REPLY);
-                replyMsg.putParams("body", "reply from client");
-                channelHandlerContext.writeAndFlush(new Gson().toJson(replyMsg));
-            }break;
-            case REPLY:{
-                //System.out.println("receive client msg: "+baseMsg.getParams().get("body"));
-            }break;
-            case Debug:{
-            	System.out.println("result: "+baseMsg.getParams().get("result"));
-            }
+    
             default:break;
         }
         ReferenceCountUtil.release(msgType);

@@ -16,25 +16,34 @@ public class BaseMsg  implements Serializable {
     private MsgType type;
     private String clientId;
     private String groupId;
-    private long timeStamp;
+    private Date date;
     private Map<String,Object> params;
     
     public BaseMsg() {
-        this.clientId = Constants.getClientId();
+        this.clientId = "server";
         params = new HashMap<String,Object>();
     }
     
     
 
-	public long getTimeStamp() {
-		return timeStamp;
+	
+
+
+	public Date getDate() {
+		return date;
 	}
 
 
 
-	public void setTimeStamp(long timeStamp) {
-		this.timeStamp = timeStamp;
+
+
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
+
+
+
 
 
 
@@ -59,6 +68,16 @@ public class BaseMsg  implements Serializable {
     }
     
     public void putParams(String key, Object val){
+    	if(params.containsKey(key)){
+    		return;
+    	}
+    	params.put(key, val);
+    }
+    
+    public void setParams(String key,Object val){
+    	if(!params.containsKey(key)){
+    		return;
+    	}
     	params.put(key, val);
     }
 

@@ -12,14 +12,6 @@ public enum  MsgType {
 	 */
     PING,
     /*
-     * 
-     */
-    ASK,
-    /*
-     * 
-     */
-    REPLY,
-    /*
      * Authentication
      * params: cookie.clientId -- String
      *         clientVersion -- Long(optional)
@@ -27,7 +19,8 @@ public enum  MsgType {
     LOGIN,
     /*
      * Group Chat
-     * params: body -- String         
+     * params: body -- String (content)
+     *         msgList -- List         
      */
     ChatMsg,
     /*
@@ -39,7 +32,7 @@ public enum  MsgType {
    
     /*
      * For Debug
-     * params: body -- command
+     * params: body -- string(command)
      *         
      */ 
     Debug
