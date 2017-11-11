@@ -18,12 +18,29 @@ public class BaseMsg  implements Serializable {
     private String groupId;
     private long date;
     private Map<String,Object> params;
+    private String avatar;
+    
+    
     
     public BaseMsg() {
         this.clientId = "server";
         params = new HashMap<String,Object>();
     }
     
+    
+    
+	public String getAvatar() {
+		return avatar;
+	}
+
+
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+
+
 	public long getDate() {
 		return date;
 	}
