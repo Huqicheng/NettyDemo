@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -124,23 +125,30 @@ public class NettyService {
 			log.error("groupId is not existed");
 			return FAILED;
 		}
-		baseMsg.setDate(baseMsg.getDate());
+		baseMsg.setDate(new Date().getTime());
 		
 		String str = new Gson().toJson(baseMsg);
 		
-		//persist baseMsg to database , not be implemented yet
+		//persist
 		groupDao.saveMsg(baseMsg);
 		
-		List<String> list = groupDao.getClientsOfGroup(baseMsg.getGroupId());
-		for(String clientId:list){
-			Channel ch = NettyChannelMap.getClientFromGroup(clientId, baseMsg.getGroupId());
-			if(ch == null || clientId.equals(baseMsg.getClientId())){
-				//add msg to redis cache
-				//jdeisDao.SaveMessage(jdeisDao.getKeyByCliGrp(clientId, baseMsg.getGroupId()),str );
+		Map<String,Channel> channels = NettyChannelMap.getGroup(baseMsg.getGroupId());
+		if(channels == null){
+			return FAILED;
+		}
+		for (Map.Entry entry:channels.entrySet()){
+			if(entry.getKey().equals(baseMsg.getClientId())){
 				continue;
 			}
+			
+			if(entry.getValue() == null){
+				continue;
+			}
+			
+			Channel ch = (Channel)entry.getValue();
 			ch.writeAndFlush(str);
 		}
+		
 		
 		if(channel == null){
 			return FAILED;

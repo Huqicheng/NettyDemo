@@ -32,6 +32,15 @@ public class NettyChannelMap {
         log.debug("addToGroup: client "+clientId+" is added to group map for "+groupId);
     }
     
+    
+    public static Map<String,Channel> getGroup(String groupId){
+    	if(!map.containsKey(groupId)){
+    		log.error("getGroup: group "+groupId+" is not existed!");
+    		return null;
+    	}
+    	return map.get(groupId);
+    }
+    
     public static void add(String clientId,Channel socketChannel){
     	if(mapForNotification.containsKey(clientId)){
     		log.error("add: client "+clientId+" is existed!Don't add duplicate clients!");

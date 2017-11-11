@@ -1,5 +1,7 @@
 package dao;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,6 +12,14 @@ import java.util.List;
 
 
 
+
+
+
+
+
+
+import com.google.gson.Gson;
+
 import message.BaseMsg;
 import utils.Dbconn;
 
@@ -18,11 +28,15 @@ import utils.Dbconn;
  *
  */
 public class GroupDao {
+	
+	private Dbconn db = null;
+	public GroupDao(){
+		db = new Dbconn();
+	}
 
 	public List<String> getGroups(String clientId) throws SQLException{
 		List<String> list = new ArrayList<String>();
-		Dbconn db = new Dbconn();
-		ResultSet rs = db.query("select group_id from group_client where client_id="+clientId);
+		ResultSet rs = db.query("select group_id from user_group where user_id="+clientId);
 		
 		try {
 			while(rs.next()){
@@ -45,30 +59,60 @@ public class GroupDao {
 	}
 	
 	
-	public List<String> getClientsOfGroup(String groupId) throws SQLException{
-		List<String> list = new ArrayList<String>();
-		Dbconn db = new Dbconn();
-		ResultSet rs = db.query("select client_id from group_client where group_id="+groupId);
+//	public List<String> getClientsOfGroup(String groupId) throws SQLException{
+//		List<String> users = new ArrayList<String>();
+//		
+//		Connection conn = db.getConnection();
+//		CallableStatement c = null;
+//		
+//		try {
+//			c = conn.prepareCall("{call get_users_of_group(?)}");
+//			c.setInt(1, Integer.parseInt(groupId));
+//			
+//			ResultSet rs = c.executeQuery();
+//			while(rs.next()){
+//				users.add(rs.getString(columnIndex));
+//			}
+//			
+//			
+//			
+//		
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}finally{
+//			
+//			c.close();
+//			
+//			db.dispose();
+//		}
+//		
+//		
+//		
+//		return users;
+//	}
+	
+	
+	public void saveMsg(BaseMsg baseMsg) throws SQLException{
+		Connection conn = db.getConnection();
+		CallableStatement c = null;
 		
 		try {
-			while(rs.next()){
-				list.add(rs.getString(1));
-			}
+			c = conn.prepareCall("{call insert_a_group_chat_msg(?,?,?,?)}");
+			c.setInt(1, Integer.parseInt(baseMsg.getGroupId()));
+			c.setString(2, new Gson().toJson(baseMsg.getParams()));
+			c.setTimestamp(3, new java.sql.Timestamp(baseMsg.getDate()));
+			c.setInt(4, Integer.parseInt(baseMsg.getClientId()));
+			c.executeUpdate();
 			
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
 			
-		} finally{
-			if(rs!=null)
-			{
-				rs.close();
-			}
+			c.close();
+			
 			db.dispose();
 		}
-		return list;
-	}
-	
-	
-	public void saveMsg(BaseMsg baseMsg){
-		
 	}
 	public static void main(String[] args) {
 		GroupDao gd = new GroupDao();
