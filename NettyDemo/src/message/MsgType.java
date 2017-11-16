@@ -18,6 +18,10 @@ public enum  MsgType {
      */
     LOGIN,
     /*
+     * msgList
+     */
+    ReplyForLogin,
+    /*
      * Group Chat
      * params: body -- String (content)
      *         msgList -- List         
@@ -35,6 +39,18 @@ public enum  MsgType {
      * params: body -- string(command)
      *         
      */ 
-    Debug
+    Debug,
+    /*
+     * For Notification
+     */
+    Norification,
+    /*
+     * For Application
+     * params: target_client_id
+     * 		   group_name
+     *         group_owner_name
+     *         
+     */
+    Application
     
 }

@@ -59,37 +59,37 @@ public class GroupDao {
 	}
 	
 	
-//	public List<String> getClientsOfGroup(String groupId) throws SQLException{
-//		List<String> users = new ArrayList<String>();
-//		
-//		Connection conn = db.getConnection();
-//		CallableStatement c = null;
-//		
-//		try {
-//			c = conn.prepareCall("{call get_users_of_group(?)}");
-//			c.setInt(1, Integer.parseInt(groupId));
-//			
-//			ResultSet rs = c.executeQuery();
-//			while(rs.next()){
-//				users.add(rs.getString(columnIndex));
-//			}
-//			
-//			
-//			
-//		
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}finally{
-//			
-//			c.close();
-//			
-//			db.dispose();
-//		}
-//		
-//		
-//		
-//		return users;
-//	}
+	public List<String> getClientsOfGroup(String groupId) throws SQLException{
+		List<String> users = new ArrayList<String>();
+		
+		Connection conn = db.getConnection();
+		CallableStatement c = null;
+		
+		try {
+			c = conn.prepareCall("{call get_users_of_group(?)}");
+			c.setInt(1, Integer.parseInt(groupId));
+			
+			ResultSet rs = c.executeQuery();
+			while(rs.next()){
+				users.add(rs.getString("id"));
+			}
+			
+			
+			
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			
+			c.close();
+			
+			db.dispose();
+		}
+		
+		
+		
+		return users;
+	}
 	
 	
 	public void saveMsg(BaseMsg baseMsg) throws SQLException{

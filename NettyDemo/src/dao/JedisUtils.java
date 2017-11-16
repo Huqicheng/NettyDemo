@@ -17,6 +17,8 @@ import redis.clients.jedis.exceptions.JedisException;
 public abstract class JedisUtils {
     public abstract int getDBIndex();
     public abstract String getKeyByCliGrp(String clientId, String groupId);
+    public abstract String getKeyOfNotification(String clientId);
+    public abstract String getKeyOfApplication(String clientId);
 
     protected JedisPool jedisPool;
 

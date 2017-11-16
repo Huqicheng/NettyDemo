@@ -4,6 +4,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 
+
 import org.apache.commons.pool.impl.GenericObjectPool;  
 /**
  * @author huqic_000
@@ -26,7 +27,6 @@ public class JedisUtilsImpl extends JedisUtils{
     private static boolean TEST_ON_BORROW = false;  
 	@Override
 	public int getDBIndex() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 	
@@ -41,6 +41,16 @@ public class JedisUtilsImpl extends JedisUtils{
 		configWrapper.setMaxWait(MAX_WAIT);
 		configWrapper.setTestOnBorrow(TEST_ON_BORROW);
         jedisPool = new JedisPool(configWrapper.getConfig(), ADDR, PORT);  
+	}
+
+	@Override
+	public String getKeyOfNotification(String clientId) {
+		return "client"+clientId+"@notification";
+	}
+
+	@Override
+	public String getKeyOfApplication(String clientId) {
+		return "client"+clientId+"@application";
 	}
 	
 	

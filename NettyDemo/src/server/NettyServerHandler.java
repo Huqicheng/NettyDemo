@@ -59,7 +59,9 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
             case ChatMsg:{
             	anycService.addWork(ns, "pushGroupMsg",new Object[] {baseMsg, channelHandlerContext.channel()});
             }break;
-            
+            case Application:{
+            	anycService.addWork(ns, "pushApplication2client",new Object[] {baseMsg, channelHandlerContext.channel()});
+            }break;
             default:break;
         }
         ReferenceCountUtil.release(baseMsg);
@@ -69,7 +71,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
     		throws Exception {
     	// TODO Auto-generated method stub
     	System.out.println("Error: "+cause.getMessage());
-    	NettyChannelMap.remove((SocketChannel)ctx.channel());
+    	anycService.addWork(ns, "doLogout",new Object[] { ctx.channel()});
     }
 	
 

@@ -12,7 +12,7 @@ import redis.clients.jedis.Jedis;
  */
 public class JredisDao {
 
-    static int MAX_MESSAGE_QUEUE = 10;
+    static int MAX_MESSAGE_QUEUE = 1;
     JedisUtils impl = null;
     
     public JredisDao(){
@@ -41,6 +41,10 @@ public class JredisDao {
     
     public String getNotificationKey(String clientId){
     	return impl.getKeyByCliGrp(clientId, "notification");
+    }
+    
+    public String getApplicationKey(String clientId){
+    	return impl.getKeyOfApplication(clientId);
     }
     public void SAMPLE_MessageQueue()
     { 	
